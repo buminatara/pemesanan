@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Pemesanan Kantin Sekolah Digital</title>
+    <!-- Meta Descriptions for SEO -->
+    <meta name="description" content="Aplikasi pemesanan makanan dan pengelolaan kantin sekolah berbasis web modern dengan sistem struk otomatis dan manajemen stok stall.">
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="style.css">
+    <!-- FontAwesome for Premium Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- APP HEADER WITH SEGMENTED ROLE CONTROL -->
+        <header class="app-header">
+            <div class="brand-section">
+                <div class="brand-icon">
+                    <i class="fa-solid fa-utensils"></i>
+                </div>
+                <div class="brand-text">
+                    <h1>Kantin Sekolah</h1>
+                    <span>UAS Algoritma Pemrograman</span>
+                </div>
+            </div>
+            
+            <nav class="role-selector" aria-label="Pilih Mode Akses">
+                <button id="btn-role-buyer" class="role-btn active" onclick="switchView('buyer')">
+                    <i class="fa-solid fa-shopping-cart"></i> Mode Pembeli
+                </button>
+                <button id="btn-role-seller" class="role-btn" onclick="switchView('seller')">
+                    <i class="fa-solid fa-store"></i> Panel Ibu Kantin
+                </button>
+                <button id="btn-role-history" class="role-btn" onclick="switchView('history')">
+                    <i class="fa-solid fa-receipt"></i> Riwayat Struk
+                </button>
+            </nav>
+        </header>
+
+        <!-- VIEW 1: PEMBELI (BUYER MODE) -->
+        <main id="view-buyer" class="app-view active">
+            <div class="buyer-layout">
+                <!-- Left: Product Storefront -->
+                <section class="storefront">
+                    <!-- Filters & Search -->
+                    <div class="control-bar">
+                        <div class="search-box">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input type="text" id="search-input" placeholder="Cari menu makanan atau minuman..." oninput="filterMenus()">
+                        </div>
+                        <div class="filter-group" id="stall-filters">
+                            <button class="filter-btn active" data-stall="all" onclick="setStallFilter('all')">Semua</button>
+                            <button class="filter-btn" data-stall="1" onclick="setStallFilter('1')">Stall 1 (Makanan Utama)</button>
+                            <button class="filter-btn" data-stall="2" onclick="setStallFilter('2')">Stall 2 (Ayam & Gorengan)</button>
+                            <button class="filter-btn" data-stall="3" onclick="setStallFilter('3')">Stall 3 (Minuman & Jus)</button>
+                        </div>
+                    </div>
+
+                    <!-- Products Grid -->
+                    <div class="menu-grid" id="menu-cards-container">
+                        <!-- Menu items will be injected by JavaScript -->
+                    </div>
+                </section>
+
+                <!-- Right: Shopping Cart Sidebar -->
+                <aside class="cart-panel">
+                    <div class="cart-header">
+                        <h2><i class="fa-solid fa-bag-shopping"></i> Keranjang</h2>
+                        <span class="cart-badge" id="cart-count">0</span>
+                    </div>
+
+                    <!-- Cart Scroll List -->
+                    <div class="cart-items" id="cart-items-container">
+                        <!-- Added items injected here -->
+                        <div class="empty-cart-message">
+                            <i class="fa-solid fa-basket-shopping"></i>
+                            <p>Keranjang Anda kosong.<br>Silakan pilih menu di samping.</p>
+                        </div>
+                    </div>
+
+                    <!-- Summary & Checkout Actions -->
+                    <div class="cart-summary">
+                        <div class="promo-alert" id="promo-banner" style="display: none;">
+                            <i class="fa-solid fa-tags"></i>
+                            <span>Promo flat Rp 5.000 aktif! (Belanja &ge; Rp 50.000)</span>
+                        </div>
+                        
+                        <div class="summary-row">
+                            <span>Subtotal</span>
+                            <span id="cart-subtotal">Rp 0</span>
+                        </div>
+                        <div class="summary-row promo-discount" id="row-discount" style="display: none;">
+                            <span>Diskon Promo</span>
+                            <span id="cart-discount">-Rp 0</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Pajak PPN (10%)</span>
+                            <span id="cart-tax">Rp 0</span>
+                        </div>
+                        <div class="summary-row grand-total">
+                            <span>Total Bayar</span>
+                            <span id="cart-grandtotal">Rp 0</span>
+                        </div>
+
+                        <button id="checkout-action-btn" class="checkout-btn" disabled onclick="checkoutCart()">
+                            <i class="fa-solid fa-cash-register"></i> Check Out & Bayar
+                        </button>
+                    </div>
+                </aside>
+            </div>
+        </main>
+
+        <!-- VIEW 2: IBU KANTIN (SELLER MODE) -->
+        <main id="view-seller" class="app-view">
+            <div class="seller-layout">
+                <!-- Horizontal Tab Bar for choosing Stall Owner 1, 2, 3 -->
+                <div class="stall-tab-bar" role="tablist" aria-label="Daftar Stall Kantin">
+                    <button class="stall-tab-btn active" data-stall="1" role="tab" aria-selected="true" onclick="switchSellerStall(1)">
+                        <h3>Ibu Kantin 1</h3>
+                        <span>Makanan Utama</span>
+                    </button>
+                    <button class="stall-tab-btn" data-stall="2" role="tab" aria-selected="false" onclick="switchSellerStall(2)">
+                        <h3>Ibu Kantin 2</h3>
+                        <span>Ayam & Gorengan</span>
+                    </button>
+                    <button class="stall-tab-btn" data-stall="3" role="tab" aria-selected="false" onclick="switchSellerStall(3)">
+                        <h3>Ibu Kantin 3</h3>
+                        <span>Minuman & Jus</span>
+                    </button>
+                </div>
+
+                <!-- Seller Mode Content -->
+                <div class="seller-dashboard">
+                    <!-- Menu Management Table -->
+                    <section class="panel-card">
+                        <div class="panel-title-bar">
+                            <h2 id="seller-stall-title">Daftar Menu - Ibu Kantin 1</h2>
+                            <button id="btn-add-menu" class="btn-primary" onclick="openAddMenuModal()">
+                                <i class="fa-solid fa-plus"></i> Tambah Menu Baru
+                            </button>
+                        </div>
+
+                        <div class="table-container">
+                            <table class="menu-table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Nama Makanan/Minuman</th>
+                                        <th>Harga Satuan</th>
+                                        <th>Stok</th>
+                                        <th style="text-align: right;">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="seller-menu-rows">
+                                    <!-- Rows injected by JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+
+                    <!-- Stall Stats & Orders Monitor -->
+                    <aside class="panel-card" style="max-height: 600px; display: flex; flex-direction: column;">
+                        <h2>Ringkasan Stall</h2>
+                        <div class="stats-strip">
+                            <div class="stat-box">
+                                <span class="stat-label">Jenis</span>
+                                <div class="stat-value" id="stat-menu-count">0</div>
+                            </div>
+                            <div class="stat-box">
+                                <span class="stat-label">Stok</span>
+                                <div class="stat-value" id="stat-stock-count">0</div>
+                            </div>
+                            <div class="stat-box">
+                                <span class="stat-label">Struk</span>
+                                <div class="stat-value" id="stat-receipt-count">0</div>
+                            </div>
+                        </div>
+
+                        <div class="receipt-divider"></div>
+
+                        <h3 style="margin-bottom: 0.5rem;"><i class="fa-solid fa-receipt"></i> Antrean Struk Stall</h3>
+                        <div class="stall-orders-container" id="stall-receipts-container">
+                            <!-- Localized receipt notifications injected here -->
+                            <div class="empty-stub-message">Belum ada pesanan masuk untuk stall ini.</div>
+                        </div>
+                    </aside>
+                </div>
+            </div>
+        </main>
+
+        <!-- VIEW 3: GLOBAL RECEIPTS HISTORY (STRUK VIEWER) -->
+        <main id="view-history" class="app-view">
+            <div class="receipts-history-layout">
+                <!-- Sidebar List of Receipts -->
+                <aside class="receipts-sidebar">
+                    <h2>Daftar Transaksi</h2>
+                    <div class="receipts-log-list" id="global-receipts-log">
+                        <!-- Receipt items injected by Javascript -->
+                        <div class="empty-stub-message">Belum ada transaksi tersimpan.</div>
+                    </div>
+                </aside>
+
+                <!-- Active Receipt Paper View -->
+                <section class="panel-card justify-between align-center" style="min-height: 500px;">
+                    <div id="receipt-paper-container" style="width: 100%;">
+                        <div class="empty-stub-message" style="margin-top: 8rem;">
+                            <i class="fa-solid fa-receipt" style="font-size: 3rem; opacity: 0.2; margin-bottom: 1rem; display: block;"></i>
+                            Pilih salah satu struk di sebelah kiri untuk melihat detail struk.
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- =========================================================================
+       MODALS
+       ========================================================================= */ -->
+
+    <!-- Add/Edit Menu Modal -->
+    <div class="modal-overlay" id="menu-modal">
+        <div class="modal-content">
+            <button class="modal-close-btn" onclick="closeMenuModal()">&times;</button>
+            <div class="modal-header">
+                <h2 id="modal-title">Tambah Menu Baru</h2>
+            </div>
+            <form id="menu-form" onsubmit="saveMenuForm(event)">
+                <input type="hidden" id="form-action-mode" value="add">
+                
+                <div class="form-group">
+                    <label for="menu-id">ID Menu (Angka Unik)</label>
+                    <input type="number" id="menu-id" class="form-control" required placeholder="Contoh: 104">
+                </div>
+                
+                <div class="form-group">
+                    <label for="menu-name">Nama Makanan/Minuman</label>
+                    <input type="text" id="menu-name" class="form-control" required placeholder="Contoh: Nasi Tumpeng Mini">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="menu-price">Harga (Rp)</label>
+                        <input type="number" id="menu-price" class="form-control" min="0" required placeholder="15000">
+                    </div>
+                    <div class="form-group">
+                        <label for="menu-stock">Jumlah Stok</label>
+                        <input type="number" id="menu-stock" class="form-control" min="0" required placeholder="10">
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="closeMenuModal()">Batal</button>
+                    <button type="submit" class="btn-primary">Simpan Menu</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Active Invoice Checkout Printer Modal -->
+    <div class="modal-overlay" id="invoice-modal">
+        <div class="modal-content" style="max-width: 440px;">
+            <button class="modal-close-btn" onclick="closeInvoiceModal()">&times;</button>
+            <div class="modal-header">
+                <h2>Struk Pembelian</h2>
+            </div>
+            
+            <div id="invoice-receipt-wrapper">
+                <!-- Realistic Receipt will be rendered here -->
+            </div>
+
+            <div class="receipt-buttons">
+                <button class="btn-secondary" onclick="closeInvoiceModal()">Tutup</button>
+                <button class="btn-primary" onclick="downloadReceiptAsTxt()">
+                    <i class="fa-solid fa-download"></i> Unduh Struk (.txt)
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications Container -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <!-- App Logic Script -->
+    <script src="script.js"></script>
+</body>
+</html>

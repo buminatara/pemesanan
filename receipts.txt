@@ -1,0 +1,24 @@
+--- STRUK TRANSAKSI ---
+Ayam Crispy Saus Keju x 3 @ 19000 = 57000
+Ayam Geprek Bawang x 5 @ 18000 = 90000
+Subtotal: Rp 147000
+Diskon: -Rp 5000
+Pajak: Rp 14700
+Total Akhir: Rp 156700
+-----------------------
+
+--- STRUK TRANSAKSI ---
+Mie Goreng Spesial x 1 @ 12000 = 12000
+Subtotal: Rp 12000
+Pajak: Rp 1200
+Total Akhir: Rp 13200
+-----------------------
+
+--- STRUK TRANSAKSI ---
+Nasi Putih Anget x 1 @ 4000 = 4000
+Mie Goreng Spesial x 1 @ 12000 = 12000
+Subtotal: Rp 16000
+Pajak: Rp 1600
+Total Akhir: Rp 17600
+-----------------------
+

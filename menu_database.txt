@@ -1,0 +1,10 @@
+101|Nasi Goreng Kantin 1|15000|8|1
+102|Mie Goreng Spesial|12000|13|1
+103|Nasi Putih Anget|4000|29|1
+201|Ayam Geprek Bawang|18000|3|2
+202|Ayam Bakar Madu|20000|5|2
+203|Tahu Goreng Penyet|2000|16|2
+301|Es Teh Manis Jumbo|4000|47|3
+302|Jus Alpukat Creamy|10000|12|3
+303|Es Jeruk Segar|5000|15|3
+204|Ayam Crispy Saus Keju|19000|9|2
